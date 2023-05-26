@@ -1,13 +1,12 @@
 import re
 import string
 from random import random, choices
-
+import strgen as StringGenerator
 from behave import *
 from time import sleep
 
 from selenium.webdriver import Keys
-from strgen import StringGenerator
-
+letters = string.ascii_letters
 use_step_matcher("parse")
 
 
@@ -250,6 +249,16 @@ def step_impl(context, payload, identifier, value):
         elif payload == 'Email':
             context.browser.text_field(kwargs).clear()
             context.browser.text_field(kwargs).send_keys(context.fake.email())
+        elif payload == 'City':
+            context.browser.text_field(kwargs).clear()
+            context.browser.text_field(kwargs).send_keys(context.fake.city())
+        elif payload == 'State':
+            context.browser.text_field(kwargs).clear()
+            context.browser.text_field(kwargs).send_keys(context.fake.state())
+        elif payload == 'Zip Code':
+            random_zipcode = ''.join(choices(string.digits, k=5))
+            context.browser.text_field(kwargs).clear()
+            context.browser.text_field(kwargs).send_keys(random_zipcode)
         elif payload == 'SSN':
             random_ssn = ''.join(choices(string.digits, k=4))
             context.browser.text_field(kwargs).clear()
@@ -259,9 +268,9 @@ def step_impl(context, payload, identifier, value):
             random_phone_number = ''.join(choices(string.digits, k=10))
             context.browser.text_field(kwargs).send_keys(random_phone_number)
         elif payload == 'Password':
+            random_password = ''.join(choices(string.ascii_letters, k=10))
             context.browser.text_field(kwargs).clear()
-            context.browser.text_field(kwargs).send_keys(
-                StringGenerator(r'[\c]{6:12}&[!#\$]&[\d]&[\u]{2}').render())
+            context.browser.text_field(kwargs).send_keys(random_password)
         elif payload == 'Username':
             context.browser.text_field(kwargs).clear()
             context.browser.text_field(kwargs).send_keys(context.fake.user_name())
